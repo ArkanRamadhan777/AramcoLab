@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f0f6ff;
+  background-image:
+    radial-gradient(ellipse at 15% 0%, #bfdbfe55 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, #dbeafe44 0%, transparent 50%);
+  background-attachment: fixed;
+  color: #1e293b;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e8f0fe;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #93c5fd;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Blue glow card effect */
+.card-glow {
+  border: 1px solid rgba(147, 197, 253, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(147, 197, 253, 0.15),
+    0 0 12px rgba(96, 165, 250, 0.15),
+    0 4px 24px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card-glow:hover {
+  border-color: rgba(96, 165, 250, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(96, 165, 250, 0.2),
+    0 0 20px rgba(96, 165, 250, 0.25),
+    0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Print styles for PDF export */
+@media print {
+  body {
+    background: white !important;
+  }
+  
+  aside, header, .print\\:hidden {
+    display: none !important;
+  }
+  
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .print\\:p-0 {
+    padding: 0 !important;
+  }
+  
+  .print\\:mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  
+  .print\\:text-xl {
+    font-size: 1.25rem !important;
+  }
+  
+  .print\\:text-sm {
+    font-size: 0.875rem !important;
+  }
+}
