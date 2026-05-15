@@ -38,6 +38,7 @@ export default function InventoryPage() {
   const [inventory, setInventory] = useState(getInventory())
   const [currentPage, setCurrentPage] = useState(1)
   const [editItem, setEditItem] = useState(null)
+  const [deleteItemId, setDeleteItemId] = useState(null)
   const [filterCondition, setFilterCondition] = useState('')
   const [sortBy, setSortBy] = useState('')
   const [toast, setToast] = useState(location.state?.message ? { message: location.state.message, type: 'success' } : null)
@@ -81,16 +82,7 @@ export default function InventoryPage() {
   const currentItems = filteredInventory.slice(startIndex, startIndex + itemsPerPage)
 
   const handleDelete = (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-      deleteInventoryItem(id)
-      setInventory(getInventory())
-      setToast({ message: 'Barang berhasil dihapus!', type: 'success' })
-      // Reset page if needed
-      const newTotal = Math.ceil((filteredInventory.length - 1) / itemsPerPage)
-      if (currentPage > newTotal && newTotal > 0) {
-        setCurrentPage(newTotal)
-      }
-    }
+    setDeleteItemId(id)
   }
 
   const handleEdit = (item) => {
@@ -353,6 +345,53 @@ export default function InventoryPage() {
                 className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors"
               >
                 Simpan Perubahan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Modal */}
+      {deleteItemId && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl animate-fade-in-down">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Hapus Inventaris</h2>
+              <button
+                onClick={() => setDeleteItemId(null)}
+                className="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-gray-500 text-sm mb-6">
+              Apakah Anda yakin ingin menghapus item ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setDeleteItemId(null)}
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  deleteInventoryItem(deleteItemId)
+                  setInventory(getInventory())
+                  setToast({ message: 'Barang berhasil dihapus!', type: 'success' })
+                  setDeleteItemId(null)
+                  
+                  // Reset page if needed
+                  const newTotal = Math.ceil((filteredInventory.length - 1) / itemsPerPage)
+                  if (currentPage > newTotal && newTotal > 0) {
+                    setCurrentPage(newTotal)
+                  }
+                }}
+                className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition-colors"
+              >
+                Hapus
               </button>
             </div>
           </div>
