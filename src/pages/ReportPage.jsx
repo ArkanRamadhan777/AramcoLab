@@ -33,7 +33,7 @@ export default function ReportPage() {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 gap-6 mb-6">
         {/* Kondisi Barang - Donut Chart */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 print:border print:rounded-lg">
           <div className="flex items-center gap-2 mb-6">
@@ -83,28 +83,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Tren Peminjaman - Bar Chart */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 print:border print:rounded-lg">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
-                <TrendingUp size={16} className="text-purple-600" />
-              </div>
-              <h2 className="text-lg font-semibold text-gray-900">Tren Peminjaman</h2>
-            </div>
-            <span className="text-xs text-gray-400">6 Bulan Terakhir</span>
-          </div>
 
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={report.trendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
-              <Bar dataKey="peminjaman" fill="#c4b5fd" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
       </div>
 
       {/* Bottom Grid */}
@@ -169,20 +148,7 @@ export default function ReportPage() {
               <p className="text-2xl font-bold text-gray-900">{report.summary.perluServis}</p>
               <p className="text-xs text-gray-500 mt-1">Perlu Servis Segera</p>
             </div>
-            <div className="bg-purple-50 rounded-xl p-4 col-span-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mb-2">
-                    <ArrowLeft size={16} className="text-purple-600" />
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">{report.summary.terlambatDikembalikan}</p>
-                  <p className="text-xs text-gray-500 mt-1">Terlambat Dikembalikan</p>
-                </div>
-                <button className="text-xs text-gray-500 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors print:hidden">
-                  Lihat Detail
-                </button>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

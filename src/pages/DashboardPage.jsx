@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getDashboardStats, getInventory, getBorrowings } from '../lib/supabase'
+import { getDashboardStats, getInventory } from '../lib/supabase'
 import { Package, CheckCircle, AlertTriangle, Wrench, Monitor, Camera, Microscope, ChevronDown, MoreHorizontal } from 'lucide-react'
 
 export default function DashboardPage() {
   const stats = getDashboardStats()
   const inventory = getInventory()
-  const borrowings = getBorrowings()
 
   const popularItems = [
     { name: 'PC Desktop Lenovo', location: 'Lab Komputer A', status: 'Tersedia', icon: Monitor, iconBg: 'bg-blue-50', iconColor: 'text-blue-600' },
@@ -57,26 +56,37 @@ export default function DashboardPage() {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Aktivitas Peminjaman */}
+        {/* Barang Terbaru */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">Aktivitas Peminjaman</h2>
-            <button className="flex items-center gap-1 text-sm text-primary-600 font-medium hover:text-primary-700">
-              Minggu Ini <ChevronDown size={16} />
-            </button>
+            <h2 className="text-lg font-semibold text-gray-900">Barang Terbaru</h2>
+            <Link to="/dashboard/inventaris" className="text-sm text-primary-600 font-medium hover:text-primary-700">
+              Lihat Semua
+            </Link>
           </div>
           
-          {/* Chart placeholder - 3D style bars */}
-          <div className="h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-end justify-center gap-3 p-6">
-            {[40, 65, 45, 80, 55, 70, 50, 60, 75, 45, 85, 55].map((height, i) => (
-              <div
-                key={i}
-                className="w-6 rounded-t-lg transition-all hover:opacity-80"
-                style={{
-                  height: `${height}%`,
-                  backgroundColor: i % 2 === 0 ? '#93c5fd' : '#fca5a5',
-                }}
-              ></div>
+          <div className="space-y-4">
+            {[...inventory].sort((a, b) => b.id - a.id).slice(0, 5).map((item) => (
+              <div key={item.id} className="flex items-center justify-between border-b border-gray-50 pb-3 last:border-0 last:pb-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center">
+                    <Package size={18} className="text-gray-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">{item.name}</p>
+                    <p className="text-xs text-gray-400">{item.code}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                    item.condition === 'Baik' ? 'bg-green-50 text-green-600' :
+                    item.condition === 'Rusak' ? 'bg-red-50 text-red-600' : 'bg-yellow-50 text-yellow-700'
+                  }`}>
+                    {item.condition}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-800">{item.stock} Unit</span>
+                </div>
+              </div>
             ))}
           </div>
         </div>

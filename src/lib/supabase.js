@@ -95,16 +95,7 @@ const INITIAL_INVENTORY = [
   { id: 25, name: 'Whiteboard 120x240cm', code: 'LAB-FB-003', category: 'Furniture Lab', condition: 'Baik', stock: 2, image: null },
 ]
 
-const BORROWING_DATA = [
-  { id: 1, item: 'Laptop ASUS VivoBook 14', borrower: 'Andi Pratama', date: '2024-04-01', returnDate: '2024-04-08', status: 'Dikembalikan' },
-  { id: 2, item: 'Arduino Uno Starter Kit', borrower: 'Siti Rahayu', date: '2024-04-03', returnDate: null, status: 'Dipinjam' },
-  { id: 3, item: 'Crimping Tool Set', borrower: 'Budi Santoso', date: '2024-04-05', returnDate: '2024-04-06', status: 'Dikembalikan' },
-  { id: 4, item: 'Raspberry Pi 4 Model B', borrower: 'Rina Wati', date: '2024-04-07', returnDate: null, status: 'Dipinjam' },
-  { id: 5, item: 'Router MikroTik hAP ac3', borrower: 'Deni Kurnia', date: '2024-03-28', returnDate: null, status: 'Terlambat' },
-  { id: 6, item: 'Webcam Logitech C920', borrower: 'Rizki Ramadhan', date: '2024-04-10', returnDate: null, status: 'Dipinjam' },
-  { id: 7, item: 'LAN Tester', borrower: 'Maya Sari', date: '2024-04-09', returnDate: '2024-04-10', status: 'Dikembalikan' },
-  { id: 8, item: 'Laptop ASUS VivoBook 14', borrower: 'Bayu Aditya', date: '2024-04-12', returnDate: null, status: 'Dipinjam' },
-]
+
 
 // ============================================
 // LOCAL STORAGE PERSISTENCE
@@ -237,13 +228,7 @@ export function resetInventoryData() {
   saveInventory(inventoryData)
 }
 
-// ============================================
-// BORROWING FUNCTIONS
-// ============================================
 
-export function getBorrowings() {
-  return [...BORROWING_DATA]
-}
 
 // ============================================
 // DASHBOARD STATS
@@ -289,19 +274,10 @@ export function getReportData() {
       { name: 'Perbaikan', value: perbaikanPct, color: '#c4b5fd' },
       { name: 'Rusak', value: rusakPct, color: '#fca5a5' },
     ],
-    trendData: [
-      { month: 'Jan', peminjaman: 45 },
-      { month: 'Feb', peminjaman: 52 },
-      { month: 'Mar', peminjaman: 48 },
-      { month: 'Apr', peminjaman: 70 },
-      { month: 'Mei', peminjaman: 55 },
-      { month: 'Jun', peminjaman: 60 },
-    ],
     categories,
     summary: {
       barangBaru: 24,
       perluServis: rusak + perbaikan,
-      terlambatDikembalikan: BORROWING_DATA.filter(b => b.status === 'Terlambat').length,
     },
   }
 }
