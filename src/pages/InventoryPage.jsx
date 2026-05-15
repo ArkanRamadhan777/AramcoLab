@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { getInventory, deleteInventoryItem, updateInventoryItem, CATEGORIES, getCurrentUser } from '../lib/supabase'
 import { Filter, ArrowUpDown, Pencil, Trash2, Monitor, Microscope, Printer, Tv, Camera, FlaskConical, X, ChevronDown } from 'lucide-react'
 
@@ -33,19 +33,39 @@ const conditionStyles = {
 
 export default function InventoryPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const user = getCurrentUser()
   const [inventory, setInventory] = useState(getInventory())
   const [currentPage, setCurrentPage] = useState(1)
   const [editItem, setEditItem] = useState(null)
   const [filterCondition, setFilterCondition] = useState('')
   const [sortBy, setSortBy] = useState('')
+  const [toast, setToast] = useState(location.state?.message ? { message: location.state.message, type: 'success' } : null)
   const itemsPerPage = 4
+
+  // Clear location state after reading it
+  useEffect(() => {
+    if (location.state?.message) {
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
+
+  // Auto hide toast
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toast])
 
   // Filter
   let filteredInventory = [...inventory]
   if (filterCondition) {
     filteredInventory = filteredInventory.filter(item => item.condition === filterCondition)
   }
+
+  // Default Sort (Newest first - higher ID first)
+  filteredInventory.sort((a, b) => b.id - a.id)
 
   // Sort
   if (sortBy === 'name') {
@@ -64,6 +84,7 @@ export default function InventoryPage() {
     if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
       deleteInventoryItem(id)
       setInventory(getInventory())
+      setToast({ message: 'Barang berhasil dihapus!', type: 'success' })
       // Reset page if needed
       const newTotal = Math.ceil((filteredInventory.length - 1) / itemsPerPage)
       if (currentPage > newTotal && newTotal > 0) {
@@ -87,11 +108,34 @@ export default function InventoryPage() {
       })
       setInventory(getInventory())
       setEditItem(null)
+      setToast({ message: 'Barang berhasil diperbarui!', type: 'success' })
     }
   }
 
   return (
     <div>
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-4 right-4 z-50 animate-fade-in-down">
+          <div className="bg-white border border-green-100 rounded-xl p-4 shadow-lg flex items-center gap-3 max-w-sm">
+            <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">{toast.message}</p>
+            </div>
+            <button 
+              onClick={() => setToast(null)}
+              className="text-gray-400 hover:text-gray-600 ml-auto"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

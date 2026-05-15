@@ -36,7 +36,7 @@ export default function AddInventoryPage() {
       image: null,
     })
 
-    navigate('/dashboard/inventaris')
+    navigate('/dashboard/inventaris', { state: { message: 'Barang berhasil ditambahkan!' } })
   }
 
   return (
